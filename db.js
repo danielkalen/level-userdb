@@ -1,5 +1,5 @@
 var async = require('async')
-var bcrypt = require('bcrypt-nodejs')
+var bcrypt = require('bcrypt')
 var levelup = require('levelup')
 var through = require('through')
 var bytewise = require('bytewise')
@@ -23,9 +23,7 @@ function genTimestamp(dt) {
 }
 
 function encryptPassword(password, cb) {
-  bcrypt.genSalt(10, function(err, salt){
-    bcrypt.hash(password, salt, null, cb)
-  })
+  bcrypt.hash(password, 10, cb)
 }
 
 function buildUser(password, data, cb, insecure) {
@@ -45,7 +43,6 @@ function buildUser(password, data, cb, insecure) {
     }
   }
   f(password, function(err, pass) {
-    if (err) throw err
     var d = new Date()
     var userObj = {
       password: pass,
